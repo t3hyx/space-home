@@ -123,6 +123,10 @@ function createSolarSystem() {
     planet.position.x = Math.cos(angle) * orbit
     planet.position.z = Math.sin(angle) * orbit
 
+    // ** Orbit lines
+    const orbitLine = createOrbitLine(orbit)
+    scene.add(orbitLine)
+
     scene.add(planet)
 
     // ** Animation data
@@ -132,6 +136,7 @@ function createSolarSystem() {
       speed,
       rotationSpeed,
       name: planetNames[i],
+      orbitLine,
     })
   }
 }
