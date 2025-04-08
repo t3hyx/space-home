@@ -255,6 +255,20 @@ onBeforeUnmount(() => {
   }
   window.removeEventListener('resize', () => {})
 
+  // * Deleting references to three.js objects
+  planets.forEach(planet => {
+    if (planet.mesh.geometry) planet.mesh.geometry.dispose()
+    if (planet.mesh.material) (planet.mesh.material as THREE.Material).dispose()
+    if (planet.orbitLine?.geometry) planet.orbitLine.geometry.dispose()
+    if (planet.orbitLine?.material) (planet.orbitLine.material as THREE.Material).dispose()
+    scene.remove(planet.mesh)
+    if (planet.orbitLine) scene.remove(planet.orbitLine)
+  })
+
+  if (sun.geometry) sun.geometry.dispose()
+  if (sun.material) (sun.material as THREE.Material).dispose()
+  scene.remove(sun)
+
   if (sceneContainer.value && renderer) {
     sceneContainer.value.removeChild(renderer.domElement)
   }
