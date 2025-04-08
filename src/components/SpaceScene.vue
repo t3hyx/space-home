@@ -21,7 +21,7 @@ interface CelestialBody {
   name: string
 }
 
-let planets: CelestialBody[] = []
+const planets: CelestialBody[] = []
 let sun: THREE.Mesh
 
 // # Solar system function
@@ -31,7 +31,7 @@ function createSolarSystem() {
   const sunMaterial = new THREE.MeshPhongMaterial({
     color: 0xFFAA00, // TODO: > VAR this color
     emissive: 0xFF4500, // TODO: > VAR this color
-    specular: 0x000000,
+    specular: 0x000000, // TODO: > VAR this color
     emissiveIntensity: 1,
     shininess: 0,
   })
@@ -111,9 +111,7 @@ function createSolarSystem() {
 function initScene() {
   console.log('scene is initializing...')
   if (!sceneContainer.value) {
-    // console.error('container not found!')
     return
-    // console.log('container found, dimensions:', sceneContainer.value.clientWidth, sceneContainer.value.clientHeight)
   }
   // * Dimensions
   const width = sceneContainer.value.clientWidth
@@ -151,18 +149,9 @@ function initScene() {
   // * Solar system building
   createSolarSystem()
 
-  // ? DEBUG: adding a test cube (red)
-  /*   const testGeometry = new THREE.BoxGeometry(10, 10, 10)
-  const testMaterial = new THREE.MeshBasicMaterial({ color: 0xFF0000 })
-  const testCube = new THREE.Mesh(testGeometry, testMaterial)
-  testCube.position.set(0, 0, 0)
-  scene.add(testCube)
-  console.log('test cube added') */
-
   // * Camera building
   camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 2000) // TODO: > VAR these
   camera.position.z = 50 // TODO: > VAR this
-  // console.log('camera created & positioned @: ', camera.position)
 
   // * Renderer building
   renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -198,12 +187,7 @@ function initScene() {
     })
 
     renderer.render(scene, camera)
-    // console.log('animation frame rendered')
   }
-
-  // ? DEBUG: explict call after first render
-  // renderer.render(scene, camera)
-  // console.log('first render executed')
 
   // * Resizing handler
   const handleResize = () => {
@@ -217,7 +201,6 @@ function initScene() {
     camera.updateProjectionMatrix()
     renderer.setSize(width, height)
   }
-
   window.addEventListener('resize', handleResize)
 
   // * Start animation
@@ -228,12 +211,6 @@ function initScene() {
 
 // # Lifecycle hooks
 onMounted(() => {
-  console.log('component mounted')
-  // ? DEBUG: using a delay to ensure DOM is ready
-  /*   setTimeout(() => {
-    console.log('initialization after delay')
-    initScene()
-  }, 200) */
   initScene()
 })
 
@@ -242,7 +219,6 @@ onBeforeUnmount(() => {
   if (animationFrameId) {
     cancelAnimationFrame(animationFrameId)
   }
-
   window.removeEventListener('resize', () => {})
 
   if (sceneContainer.value && renderer) {
