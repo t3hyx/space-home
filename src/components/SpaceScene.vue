@@ -25,22 +25,22 @@ let planets: CelestialBody[] = []
 let sun: THREE.Mesh
 
 // # Solar system function
-const createSolarSystem = () => {
+function createSolarSystem() {
   // * Sun
   const sunGeometry = new THREE.SphereGeometry(5, 32, 32)
-  const sunMaterial = new THREE.MeshBasicMaterial({
+  const sunMaterial = new THREE.MeshPhongMaterial({
     color: 0xFFAA00, // TODO: > VAR this color
-    // ! BROKEN: CANT FIND RIGHT PROPERTY TO EMIT LIGHT
-    // TODO: <!> Need digging into LightMap & LightMapIntensity (probably)
-    emissive: 0xFFAA00,
-    emissiveIntensity: 1
+    emissive: 0xFF4500, // TODO: > VAR this color
+    specular: 0x000000,
+    emissiveIntensity: 1,
+    shininess: 0,
   })
   sun = new THREE.Mesh(sunGeometry, sunMaterial)
   scene.add(sun)
-  
+
   const sunLight = new THREE.PointLight(0xFFFFFF, 1.5, 1000) // TODO: > VAR these
   sun.add(sunLight)
-  
+
   // * Planets
   const planetColors = [
     0x3498DB, // blue (Mercury?)
@@ -52,11 +52,18 @@ const createSolarSystem = () => {
     0x1ABC9C, // teal (Uranus?)
     0x34495E, // d-blue (Neptune?)
   ]
-  
+
   const planetNames = [
-    'Mercury','Venus','Earth','Mars','Jupiter','Saturn','Uranus','Neptune'
+    'Mercury',
+    'Venus',
+    'Earth',
+    'Mars',
+    'Jupiter',
+    'Saturn',
+    'Uranus',
+    'Neptune',
   ]
-  
+
   // * Set unique stats for each planet
   for (let i = 0; i < 8; i++) {
     // ** Size
@@ -114,19 +121,19 @@ function initScene() {
 
   // * Scene building
   scene = new THREE.Scene()
-  scene.background = new THREE.Color(0x000000) // TODO: > VAR this color
+  scene.background = new THREE.Color(0x000000)
 
   // * Adding ambient light
-  const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5) // TODO: > VAR this color
+  const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5)
   scene.add(ambientLight)
 
   // * Adding stars to the background
   // TODO: >> Find another way to implement real space
   const starsGeometry = new THREE.BufferGeometry()
   const starsMaterial = new THREE.PointsMaterial({
-    color: 0xFFFFFF, 
+    color: 0xFFFFFF,
     size: 0.5,
-    sizeAttenuation: true
+    sizeAttenuation: true,
   })
 
   const starsVertices = []
@@ -166,6 +173,30 @@ function initScene() {
   // * Animation function
   const animate = () => {
     animationFrameId = requestAnimationFrame(animate)
+
+    // ** Sun's rotation
+    if (sun) {
+      sun.rotation.y += 0.005
+    }
+
+    // ** Planets animation
+    planets.forEach((planet) => {
+      // current coordinates
+      const currentPos = planet.mesh.position
+      const angle = Math.atan2(currentPos.x, currentPos.z)
+
+      // new coordinates
+      const newAngle = angle + planet.speed
+      const newX = Math.cos(newAngle) * planet.orbit
+      const newZ = Math.sin(newAngle) * planet.orbit
+
+      planet.mesh.position.x = newX
+      planet.mesh.position.z = newZ
+
+      // planet rotation
+      planet.mesh.rotation.y += planet.rotationSpeed
+    })
+
     renderer.render(scene, camera)
     // console.log('animation frame rendered')
   }
