@@ -19,10 +19,39 @@ interface CelestialBody {
   speed: number
   rotationSpeed: number
   name: string
+  orbitLine?: THREE.Line
 }
 
 const planets: CelestialBody[] = []
 let sun: THREE.Mesh
+
+// # Orbit Line function
+function createOrbitLine(radius: number): THREE.Line {
+  const segments = 128
+  const orbitGeometry = new THREE.BufferGeometry()
+
+  const vertices = []
+  for (let i = 0; i <= segments; i++) {
+    const theta = (i / segments) * Math.PI * 2
+    vertices.push(
+      Math.cos(theta) * radius, // x
+      0, // y
+      Math.sin(theta) * radius, // z
+    )
+  }
+
+  // * Circle Geometry building
+  orbitGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3))
+
+  // * Orbit line Material
+  const orbitMaterial = new THREE.LineBasicMaterial({
+    color: 0xFFFFFF,
+    transparent: true,
+    opacity: 0.3,
+  })
+
+  return new THREE.Line(orbitGeometry, orbitMaterial)
+}
 
 // # Solar system function
 function createSolarSystem() {
@@ -57,15 +86,15 @@ function createSolarSystem() {
     'Mercury',
     'Venus',
     'Earth',
-    'Mars',
+  /* 'Mars',
     'Jupiter',
     'Saturn',
     'Uranus',
-    'Neptune',
+    'Neptune', */
   ]
 
   // * Set unique stats for each planet
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 3; i++) {
     // ** Size
     const size = i < 4 ? 0.8 + (i * 0.2) : 1.5 + ((i - 4) * 0.3)
 
