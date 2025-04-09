@@ -24,6 +24,7 @@ interface Planet {
   material: THREE.MeshLambertMaterial
   mesh: THREE.Mesh
   angle: number
+
 }
 
 let planets: Planet[] = []
