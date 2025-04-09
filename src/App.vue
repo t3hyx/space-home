@@ -17,15 +17,20 @@ import SpaceScene from './components/SpaceScene.vue'
   box-sizing: border-box;
 }
 
-body {
+body, html {
   font-family: sans-serif;
   overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
 }
 
 .app-container {
   width: 100vw;
   height: 100vh;
-  background-color: #222;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .scene-wrapper {
