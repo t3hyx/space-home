@@ -60,9 +60,9 @@ function createSolarSystem() {
   const sunMaterial = new THREE.MeshPhongMaterial({
     color: 0xFFAA00, // TODO: > VAR this color
     emissive: 0xFF4500, // TODO: > VAR this color
-    //specular: 0x000000, // TODO: > VAR this color
+    // specular: 0x000000, // TODO: > VAR this color
     emissiveIntensity: 1,
-    //shininess: 0,
+    // shininess: 0,
   })
   sun = new THREE.Mesh(sunGeometry, sunMaterial)
   scene.add(sun)
@@ -79,11 +79,11 @@ function createSolarSystem() {
     0x3498DB, // blue (Mercury?)
     0xE67E22, // orange (Venus?)
     0x2ECC71, // green (Earth?)
-    //0xE74C3C, // red (Mars?)
-    //0xF1C40F, // yellow (Jupiter?)
-    //0x9B59B6, // purple (Saturn?)
-    //0x1ABC9C, // teal (Uranus?)
-    //0x34495E, // d-blue (Neptune?)
+    // 0xE74C3C, // red (Mars?)
+    // 0xF1C40F, // yellow (Jupiter?)
+    // 0x9B59B6, // purple (Saturn?)
+    // 0x1ABC9C, // teal (Uranus?)
+    // 0x34495E, // d-blue (Neptune?)
   ]
 
   const planetNames = [
@@ -261,17 +261,24 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', () => {})
 
   // * Deleting references to three.js objects
-  planets.forEach(planet => {
-    if (planet.mesh.geometry) planet.mesh.geometry.dispose()
-    if (planet.mesh.material) (planet.mesh.material as THREE.Material).dispose()
-    if (planet.orbitLine?.geometry) planet.orbitLine.geometry.dispose()
-    if (planet.orbitLine?.material) (planet.orbitLine.material as THREE.Material).dispose()
+  planets.forEach((planet) => {
+    if (planet.mesh.geometry)
+      planet.mesh.geometry.dispose()
+    if (planet.mesh.material)
+      (planet.mesh.material as THREE.Material).dispose()
+    if (planet.orbitLine?.geometry)
+      planet.orbitLine.geometry.dispose()
+    if (planet.orbitLine?.material)
+      (planet.orbitLine.material as THREE.Material).dispose()
     scene.remove(planet.mesh)
-    if (planet.orbitLine) scene.remove(planet.orbitLine)
+    if (planet.orbitLine)
+      scene.remove(planet.orbitLine)
   })
 
-  if (sun.geometry) sun.geometry.dispose()
-  if (sun.material) (sun.material as THREE.Material).dispose()
+  if (sun.geometry)
+    sun.geometry.dispose()
+  if (sun.material)
+    (sun.material as THREE.Material).dispose()
   scene.remove(sun)
 
   if (sceneContainer.value && renderer) {
